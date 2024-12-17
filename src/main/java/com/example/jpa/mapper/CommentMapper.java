@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    @Mapping(target="commendId", ignore = true)
+    @Mapping(target="commentId", ignore = true)
     @Mapping(target = "news", ignore = true)
     Comment commentDtoToEntity(CommentDto.Post post);
 }

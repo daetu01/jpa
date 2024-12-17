@@ -33,6 +33,6 @@ public class News {
 
     @OneToMany(mappedBy = "news")
     @JsonManagedReference
-    private List<Comment> commentList;
+    private List<Comment> comments;
 
 }

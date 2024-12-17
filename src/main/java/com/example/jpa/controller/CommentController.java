@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
@@ -33,4 +34,24 @@ public class CommentController {
 
         return "redirect:/news/" + newsId;
     }
+
+    // 댓글 삭제하기
+    @PostMapping("delete/{commentId}")
+    public String deleteComment(@PathVariable("commendId") Long commentId, @RequestParam("password") String password) {
+        Comment findComment = findVerifiedComment(commentId);
+        News findNews = findComment.getNews();
+
+        if (!findComment.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+        commentRepository.delete(findComment);
+
+        return "redirect:/news/" + findNews.getNewsId();
+    }
+
+    public Comment findVerifiedComment(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다."));
+    }
+
 }
