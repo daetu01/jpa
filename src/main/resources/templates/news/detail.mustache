@@ -1,0 +1,40 @@
+{{>common/header}}
+<div class="container mt-4">
+    {{#news}}
+        <div class="blog-post mb-4">
+            <h2 class="blog-post-title">{{title}}</h2>
+            <hr>
+            <p class="blog-post-content">{{content}}</p>
+            <hr>
+        </div>
+        <a href="/news/{{newsId}}/edit" class="btn btn-secondary">Edit</a>
+        <a href="#" class="btn btn-danger" onclick="deleteNews({{newsId}});">DELETE</a>
+        <a href="/news/list">News List</a>
+    {{/news}}
+</div>
+<script>
+    function deleteNews(id) {
+    if (confirm("정말 삭제하시겠습니까?")) { // 괄호 닫기
+        // 삭제 시 필요한 ajax 코딩
+        $.ajax({
+            url: `${id}/delete`,
+            method: "GET",
+            success: function(response) {
+                if (response) {
+                    alert('삭제되었습니다.');
+                    window.location.href = "/news/list"; // redirect
+                } else {
+                    alert('삭제 실패: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('에러 발생: ' + error + ' ' + status);
+            } // 여기에 닫는 괄호만 필요
+        });
+    } else {
+        // 삭제 취소 시 처리할 코드 (필요하면 추가)
+    }
+}
+
+</script>
+{{>common/footer}}
